@@ -1,0 +1,26 @@
+name: Deploy to DEV
+
+on:
+  push:
+    tags:
+      - 'v*-dev'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+         
+      - name: Deploy to DEV environment
+        if: github.ref_type == 'tag'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /apps/dev_bot
+            pwd
+            ls -la
+            echo dev

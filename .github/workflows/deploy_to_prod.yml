@@ -1,0 +1,25 @@
+name: Deploy to Prod
+
+on:
+  push:
+    tags:
+      - 'v*[0-9]'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+         
+      - name: Deploy to PROD environment
+        if: github.ref_type == 'tag'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /apps/bot
+            pwd
+            ls -la
